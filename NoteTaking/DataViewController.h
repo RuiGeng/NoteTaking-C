@@ -10,8 +10,13 @@
 
 @interface DataViewController : UIViewController
 
-@property (strong, nonatomic) IBOutlet UILabel *dataLabel;
+@property (weak, nonatomic) IBOutlet UITextField *nameTextField;
+
 @property (strong, nonatomic) id dataObject;
+
+@property (weak, nonatomic) IBOutlet UITextView *interactionTextView;
+
+@property (weak, nonatomic) IBOutlet UIImageView *cardImageView;
 
 @end
 
