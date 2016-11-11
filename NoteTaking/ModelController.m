@@ -41,6 +41,7 @@
             
             for(Person *person in arrayResult){
                 [_pageData2 addObject:person];
+                [_pageData addObject:person.timestamp];
             }
         }
         else{
@@ -155,11 +156,13 @@
             return nil;
         }
         
-        NSData *uiImageData = UIImagePNGRepresentation(dataViewControllerInstance.cardImageView.image);
-        
-        [self SaveCoreData:dataViewControllerInstance.nameTextField.text Date:dataViewControllerInstance.timestampTextField.text Interaction:dataViewControllerInstance.interactionTextView.text CardImage:uiImageData];
-        
-        dataViewControllerInstance.personObject = self.pageData2[index-1];
+        if( index != [self.pageData2 count]){
+            NSData *uiImageData = UIImagePNGRepresentation(dataViewControllerInstance.cardImageView.image);
+            
+            [self SaveCoreData:dataViewControllerInstance.nameTextField.text Date:dataViewControllerInstance.timestampTextField.text Interaction:dataViewControllerInstance.interactionTextView.text CardImage:uiImageData];
+            
+            dataViewControllerInstance.personObject = self.pageData2[index-1];
+        }
         
         NSString *date = self.getDateString;
         [_pageData addObject:date];
