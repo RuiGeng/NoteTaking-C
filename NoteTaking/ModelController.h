@@ -7,6 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Person+CoreDataProperties.h"
+#import "DataManager.h"
+
 
 @class DataViewController;
 

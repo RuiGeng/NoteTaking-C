@@ -121,8 +121,10 @@
                     </view>
                     <connections>
                         <outlet property="cardImageView" destination="P72-Br-rux" id="z9G-gx-mL4"/>
+                        <outlet property="interactionTextField" destination="vnH-3T-OOr" id="Zx1-SD-9VC"/>
                         <outlet property="interactionTextView" destination="vnH-3T-OOr" id="FcD-nt-irt"/>
                         <outlet property="nameTextField" destination="gDq-Io-6UN" id="jqO-w0-qFF"/>
+                        <outlet property="timestampTextField" destination="E7a-0A-a72" id="qud-KU-MhV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GmD-Rr-ZGN" sceneMemberID="firstResponder"/>

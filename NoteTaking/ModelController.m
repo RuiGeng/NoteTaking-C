@@ -21,17 +21,26 @@
 
 @interface ModelController ()
 
-@property (readonly, strong, nonatomic) NSArray *pageData;
+@property (readonly, strong, nonatomic) NSMutableArray *pageData;
 @end
 
 @implementation ModelController
 
+
 - (instancetype)init {
     self = [super init];
     if (self) {
-        // Create the data model.
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        _pageData = [[dateFormatter monthSymbols] copy];
+        NSManagedObjectContext *managedObjectContext = [[DataManager sharedManager] managedObjectContext];
+        
+        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Person" inManagedObjectContext:managedObjectContext];
+        
+        Person *person = [[Person alloc]initWithEntity: entityDescription insertIntoManagedObjectContext:managedObjectContext];
+        
+        person.name = @"Geng";
+        person.timestamp = [self getDateString];
+        
+        _pageData = [[NSMutableArray alloc] init];
+        [_pageData addObject:person];
     }
     return self;
 }
@@ -45,6 +54,7 @@
     // Create a new view controller and pass suitable data.
     DataViewController *dataViewController = [storyboard instantiateViewControllerWithIdentifier:@"DataViewController"];
     dataViewController.dataObject = self.pageData[index];
+    
     return dataViewController;
 }
 
@@ -81,6 +91,14 @@
         return nil;
     }
     return [self viewControllerAtIndex:index storyboard:viewController.storyboard];
+}
+
+-(NSString *)getDateString{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MMM dd, yyyy HH:mm:ss"];
+    NSDate *now = [NSDate date];
+    NSString *dateString = [dateFormatter stringFromDate:now];
+    return dateString;
 }
 
 @end

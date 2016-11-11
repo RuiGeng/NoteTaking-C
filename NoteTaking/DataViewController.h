@@ -7,10 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Person+CoreDataProperties.h"
 
 @interface DataViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
+
+@property (weak, nonatomic) IBOutlet UITextField *timestampTextField;
+
+@property (weak, nonatomic) IBOutlet UITextView *interactionTextField;
 
 @property (strong, nonatomic) id dataObject;
 

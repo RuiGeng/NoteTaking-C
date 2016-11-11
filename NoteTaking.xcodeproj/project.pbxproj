@@ -15,6 +15,10 @@
 		B342E82F1DD510110074A87C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B342E82D1DD510110074A87C /* Main.storyboard */; };
 		B342E8311DD510110074A87C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B342E8301DD510110074A87C /* Assets.xcassets */; };
 		B342E8341DD510110074A87C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B342E8321DD510110074A87C /* LaunchScreen.storyboard */; };
+		B342E83D1DD526FC0074A87C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B342E83B1DD526FC0074A87C /* Model.xcdatamodeld */; };
+		B342E8501DD52FEC0074A87C /* Person+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = B342E84F1DD52FEC0074A87C /* Person+CoreDataClass.m */; };
+		B342E8531DD5305B0074A87C /* Person+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B342E8521DD5305B0074A87C /* Person+CoreDataProperties.m */; };
+		B342E8571DD536810074A87C /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B342E8561DD536810074A87C /* DataManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +36,13 @@
 		B342E8301DD510110074A87C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B342E8331DD510110074A87C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B342E8351DD510110074A87C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B342E83C1DD526FC0074A87C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		B342E84F1DD52FEC0074A87C /* Person+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Person+CoreDataClass.m"; sourceTree = "<group>"; };
+		B342E8511DD5300D0074A87C /* Person+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Person+CoreDataClass.h"; sourceTree = "<group>"; };
+		B342E8521DD5305B0074A87C /* Person+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Person+CoreDataProperties.m"; sourceTree = "<group>"; };
+		B342E8541DD5306F0074A87C /* Person+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Person+CoreDataProperties.h"; sourceTree = "<group>"; };
+		B342E8551DD536810074A87C /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
+		B342E8561DD536810074A87C /* DataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +88,13 @@
 				B342E8321DD510110074A87C /* LaunchScreen.storyboard */,
 				B342E8351DD510110074A87C /* Info.plist */,
 				B342E81E1DD510110074A87C /* Supporting Files */,
+				B342E83B1DD526FC0074A87C /* Model.xcdatamodeld */,
+				B342E84F1DD52FEC0074A87C /* Person+CoreDataClass.m */,
+				B342E8521DD5305B0074A87C /* Person+CoreDataProperties.m */,
+				B342E8541DD5306F0074A87C /* Person+CoreDataProperties.h */,
+				B342E8511DD5300D0074A87C /* Person+CoreDataClass.h */,
+				B342E8551DD536810074A87C /* DataManager.h */,
+				B342E8561DD536810074A87C /* DataManager.m */,
 			);
 			path = NoteTaking;
 			sourceTree = "<group>";
@@ -120,6 +138,7 @@
 				TargetAttributes = {
 					B342E81A1DD510110074A87C = {
 						CreatedOnToolsVersion = 8.1;
+						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -160,11 +179,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B342E8531DD5305B0074A87C /* Person+CoreDataProperties.m in Sources */,
 				B342E8291DD510110074A87C /* DataViewController.m in Sources */,
 				B342E8231DD510110074A87C /* AppDelegate.m in Sources */,
 				B342E82C1DD510110074A87C /* ModelController.m in Sources */,
 				B342E8201DD510110074A87C /* main.m in Sources */,
 				B342E8261DD510110074A87C /* RootViewController.m in Sources */,
+				B342E8501DD52FEC0074A87C /* Person+CoreDataClass.m in Sources */,
+				B342E8571DD536810074A87C /* DataManager.m in Sources */,
+				B342E83D1DD526FC0074A87C /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,10 +305,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = NoteTaking/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.NoteTaking;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "NoteTaking/NoteTaking-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -293,10 +320,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = NoteTaking/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.NoteTaking;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "NoteTaking/NoteTaking-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -321,6 +351,19 @@
 			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		B342E83B1DD526FC0074A87C /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				B342E83C1DD526FC0074A87C /* Model.xcdatamodel */,
+			);
+			currentVersion = B342E83C1DD526FC0074A87C /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = B342E8131DD510110074A87C /* Project object */;
 }
