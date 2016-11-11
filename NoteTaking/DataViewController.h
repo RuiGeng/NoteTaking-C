@@ -19,6 +19,8 @@
 
 @property (strong, nonatomic) id dataObject;
 
+@property (strong, nonatomic) id personObject;
+
 @property (weak, nonatomic) IBOutlet UITextView *interactionTextView;
 
 @property (weak, nonatomic) IBOutlet UIImageView *cardImageView;

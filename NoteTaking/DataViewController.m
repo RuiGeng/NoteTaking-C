@@ -31,16 +31,21 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if ([self.dataObject isKindOfClass:[Person class]]){
-        Person *classSpecifiedInstance = (Person *)self.dataObject;
+    
+    self.timestampTextField.text = [self.dataObject description];
+    
+    if ([self.personObject isKindOfClass:[Person class]]) {
+        Person *classSpecifiedInstance = (Person *)self.personObject;
         if(classSpecifiedInstance != nil){
             //Person Name
             if(classSpecifiedInstance.name != nil){
                 self.nameTextField.text = classSpecifiedInstance.name;
             }
+            /*
             if(classSpecifiedInstance.timestamp != nil){
                         self.timestampTextField.text = classSpecifiedInstance.timestamp;
             }
+             */
             if(classSpecifiedInstance.interaction != nil){
                 self.interactionTextView.text = classSpecifiedInstance.interaction;
             }
@@ -49,10 +54,8 @@
                 self.cardImageView.image = image;
             }
         }
-
-
     }
-   }
+}
 
 -(void) setUITextViewStyle{
     UIColor *borderColor = [UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
