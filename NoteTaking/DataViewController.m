@@ -33,8 +33,24 @@
     [super viewWillAppear:animated];
     if ([self.dataObject isKindOfClass:[Person class]]){
         Person *classSpecifiedInstance = (Person *)self.dataObject;
-        self.nameTextField.text = classSpecifiedInstance.name;
-        self.timestampTextField.text = classSpecifiedInstance.timestamp;
+        if(classSpecifiedInstance != nil){
+            //Person Name
+            if(classSpecifiedInstance.name != nil){
+                self.nameTextField.text = classSpecifiedInstance.name;
+            }
+            if(classSpecifiedInstance.timestamp != nil){
+                        self.timestampTextField.text = classSpecifiedInstance.timestamp;
+            }
+            if(classSpecifiedInstance.interaction != nil){
+                self.interactionTextView.text = classSpecifiedInstance.interaction;
+            }
+            if(classSpecifiedInstance.cardImage != nil){
+                UIImage *image = [UIImage imageWithData: classSpecifiedInstance.cardImage];
+                self.cardImageView.image = image;
+            }
+        }
+
+
     }
    }
 

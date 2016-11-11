@@ -30,17 +30,27 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        NSManagedObjectContext *managedObjectContext = [[DataManager sharedManager] managedObjectContext];
         
-        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Person" inManagedObjectContext:managedObjectContext];
-        
-        Person *person = [[Person alloc]initWithEntity: entityDescription insertIntoManagedObjectContext:managedObjectContext];
-        
-        person.name = @"Geng";
-        person.timestamp = [self getDateString];
-        
-        _pageData = [[NSMutableArray alloc] init];
-        [_pageData addObject:person];
+        NSArray *results= [self loadCoreData];
+        if(results.count > 0){
+            [_pageData addObject:results];
+        }
+        else{
+            NSManagedObjectContext *managedObjectContext = [[DataManager sharedManager] managedObjectContext];
+            
+            NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Person" inManagedObjectContext:managedObjectContext];
+            
+            Person *person = [[Person alloc]initWithEntity: entityDescription insertIntoManagedObjectContext:managedObjectContext];
+            
+            person.name = @"";
+            person.timestamp = [self getDateString];
+            person.interaction = @"";
+            person.cardImage = nil;
+            
+            _pageData = [[NSMutableArray alloc] init];
+            
+            [_pageData addObject:person];
+        }
     }
     return self;
 }
@@ -50,7 +60,7 @@
     if (([self.pageData count] == 0) || (index >= [self.pageData count])) {
         return nil;
     }
-
+    
     // Create a new view controller and pass suitable data.
     DataViewController *dataViewController = [storyboard instantiateViewControllerWithIdentifier:@"DataViewController"];
     dataViewController.dataObject = self.pageData[index];
@@ -86,9 +96,35 @@
         return nil;
     }
     
+    DataViewController *dataViewControllerInstance = (DataViewController *)viewController;
+    
+    if([dataViewControllerInstance.nameTextField.text isEqual: @""]){
+        return nil;
+    }
+    
+    NSData *uiImageData = UIImagePNGRepresentation(dataViewControllerInstance.cardImageView.image);
+    
+    [self SaveCoreData:dataViewControllerInstance.nameTextField.text Date:dataViewControllerInstance.timestampTextField.text Interaction:dataViewControllerInstance.interactionTextView.text CardImage:uiImageData];
+    
     index++;
     if (index == [self.pageData count]) {
-        return nil;
+        
+        NSManagedObjectContext *managedObjectContext = [[DataManager sharedManager] managedObjectContext];
+        
+        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Person" inManagedObjectContext:managedObjectContext];
+        
+        Person *person = [[Person alloc]initWithEntity: entityDescription insertIntoManagedObjectContext:managedObjectContext];
+        
+        person.name = @"";
+        person.timestamp = [self getDateString];
+        person.interaction = @"";
+        person.cardImage = nil;
+        
+        _pageData = [[NSMutableArray alloc] init];
+        
+        [_pageData addObject:person];
+        
+        //return nil;
     }
     return [self viewControllerAtIndex:index storyboard:viewController.storyboard];
 }
@@ -100,5 +136,56 @@
     NSString *dateString = [dateFormatter stringFromDate:now];
     return dateString;
 }
+
+// Load data from the local database if it's avaliable
+- (NSArray*)loadCoreData {
+    
+    // 1. Get a pointer to the database
+    NSManagedObjectContext *managedObjectContext = [[DataManager sharedManager] managedObjectContext];
+    
+    // 2. fetch data from core data
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Person" inManagedObjectContext:managedObjectContext];
+    
+    [fetchRequest setEntity:entity];
+    
+    //Sort by timestamp
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:YES];
+    
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor, nil]];
+    
+    NSError *error = nil;
+    
+    NSArray *results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    if(error){
+        NSLog(@"Fetch request Failed! %@", [error localizedDescription]);
+    }
+    
+    return results;
+}
+
+// Save data from the DataView
+- (void)SaveCoreData: (NSString*)name Date:(NSString*)date Interaction:(NSString*)interaction CardImage:(NSData*) cardImage{
+    
+    NSManagedObjectContext *managedObjectContext = [[DataManager sharedManager] managedObjectContext];
+    
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Person" inManagedObjectContext:managedObjectContext];
+    
+    Person *person = [[Person alloc]initWithEntity: entityDescription insertIntoManagedObjectContext:managedObjectContext];
+    
+    [person setValue:name forKeyPath:@"name"];
+    [person setValue:date forKeyPath:@"timestamp"];
+    [person setValue:interaction forKeyPath:@"interaction"];
+    [person setValue:cardImage forKeyPath:@"cardImage"];
+    
+    NSError *error = nil;
+    if(![managedObjectContext save:&error]){
+        NSLog(@"Save Failed! %@", [error localizedDescription]);
+    }else{
+        NSLog(@"Person %@ Saved!", name);
+    }
+}
+
 
 @end
