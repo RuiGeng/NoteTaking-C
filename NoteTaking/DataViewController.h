@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Person+CoreDataProperties.h"
 
-@interface DataViewController : UIViewController
+@interface DataViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 

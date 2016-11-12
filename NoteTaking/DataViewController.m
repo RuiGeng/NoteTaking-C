@@ -85,4 +85,40 @@
     self.pageNumberLabel.text = labCount;
 }
 
+- (IBAction)takePhotoButton:(UIButton *)sender {
+    
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    
+#if TARGET_IPHONE_SIMULATOR
+    
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    
+#elif TARGET_OS_IPHONE
+    
+    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    
+#endif
+    
+    [self presentViewController:picker animated:YES completion:NULL];
+}
+
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+    
+    self.cardImageView.image = chosenImage;
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+    
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+    
+}
+
 @end

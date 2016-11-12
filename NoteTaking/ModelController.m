@@ -65,6 +65,8 @@
     return self;
 }
 
+
+//Forward flip page
 - (DataViewController *)forwardviewControllerAtIndex:(NSUInteger)index storyboard:(UIStoryboard *)storyboard {
     // Return the data view controller for the given index.
     if (([self.pageData count] == 0) || (index >= [self.pageData count])) {
@@ -75,17 +77,19 @@
     DataViewController *dataViewController = [storyboard instantiateViewControllerWithIdentifier:@"DataViewController"];
     dataViewController.dataObject = self.pageData[index];
     
+    //Set person detail view base on page index
     if (([self.pageData2 count] != 0) && (index < [self.pageData2 count])) {
         dataViewController.personObject = self.pageData2[index];
     }
     
+    //Set Page Number to dataViewController
     dataViewController.totalCount = self.pageData.count;
     dataViewController.currentCount = index + 1;
     
     return dataViewController;
 }
 
-
+//Backward filp page
 - (DataViewController *)backwardviewControllerAtIndex:(NSUInteger)index storyboard:(UIStoryboard *)storyboard {
     // Return the data view controller for the given index.
     if (([self.pageData count] == 0) || (index >= [self.pageData count])) {
@@ -94,9 +98,12 @@
     
     // Create a new view controller and pass suitable data.
     DataViewController *dataViewController = [storyboard instantiateViewControllerWithIdentifier:@"DataViewController"];
+    
+    //Set person detail view base on page index
     dataViewController.dataObject = self.pageData[index];
     dataViewController.personObject = self.pageData2[index];
     
+    //Set Page Number to dataViewController
     dataViewController.totalCount = self.pageData.count;
     dataViewController.currentCount = index + 1;
     
