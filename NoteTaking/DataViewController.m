@@ -18,6 +18,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    //Set Style
     [self setUITextViewStyle];
     [self setUIImageViewStyle];
 }
@@ -32,11 +33,14 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    // Set timestamp
     self.timestampTextField.text = [self.dataObject description];
     
     [self showCount:self.currentCount TotalCount:self.totalCount];
     
     if ([self.personObject isKindOfClass:[Person class]]) {
+        
+        //Casting id to Person
         Person *classSpecifiedInstance = (Person *)self.personObject;
         if(classSpecifiedInstance != nil){
             //Person Name
@@ -48,11 +52,16 @@
                         self.timestampTextField.text = classSpecifiedInstance.timestamp;
             }
              */
+            //Interation Notes
             if(classSpecifiedInstance.interaction != nil){
                 self.interactionTextView.text = classSpecifiedInstance.interaction;
             }
+            //Card Image
             if(classSpecifiedInstance.cardImage != nil){
+                
+                //Casting NSdata to Image
                 UIImage *image = [UIImage imageWithData: classSpecifiedInstance.cardImage];
+                //Set Image
                 self.cardImageView.image = image;
             }
         }
@@ -60,6 +69,7 @@
     
 }
 
+//Set UITextView Border
 -(void) setUITextViewStyle{
     UIColor *borderColor = [UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
     
@@ -68,6 +78,7 @@
     self.interactionTextView.layer.cornerRadius = 5.0;
 }
 
+//Set UIImageView Border
 -(void) setUIImageViewStyle{
     UIColor *borderColor = [UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
     
@@ -76,6 +87,7 @@
     self.cardImageView.layer.cornerRadius = 5.0;
 }
 
+//Show Page Number
 -(void)showCount:(NSInteger)current TotalCount:(NSInteger)total{
     
     NSString *labCount;
@@ -85,26 +97,28 @@
     self.pageNumberLabel.text = labCount;
 }
 
+//Take Photo Button Pushed
 - (IBAction)takePhotoButton:(UIButton *)sender {
-    
+    //Define an image picker
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
     picker.allowsEditing = YES;
     
 #if TARGET_IPHONE_SIMULATOR
-    
+    //use Photo Library
     picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     
 #elif TARGET_OS_IPHONE
-    
+    //use camera
     picker.sourceType = UIImagePickerControllerSourceTypeCamera;
     
 #endif
     
+    //present picker
     [self presentViewController:picker animated:YES completion:NULL];
 }
 
-
+// Select Operation
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
@@ -115,6 +129,7 @@
     
 }
 
+// Cancel Operation
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     
     [picker dismissViewControllerAnimated:YES completion:NULL];

@@ -21,8 +21,8 @@
 
 @interface ModelController ()
 
-@property (readonly, strong, nonatomic) NSMutableArray *pageData;
-@property (readonly, strong, nonatomic) NSMutableArray *pageData2;
+@property (readonly, strong, nonatomic) NSMutableArray *timestampPageData;
+@property (readonly, strong, nonatomic) NSMutableArray *personPageData;
 @end
 
 @implementation ModelController
@@ -32,34 +32,24 @@
     self = [super init];
     if (self) {
         
-        _pageData = [[NSMutableArray alloc] init];
-        _pageData2 = [[NSMutableArray alloc] init];
+        _timestampPageData = [[NSMutableArray alloc] init];
+        _personPageData = [[NSMutableArray alloc] init];
 
         NSArray *arrayResult= [self loadCoreData];
+        
+        //If has Core Data, Then Read it out, Set to The Page Data Array
         if(arrayResult.count > 0){
             NSLog(@"count = %lu", (unsigned long)arrayResult.count);
-            
+            //Set Core Data To Array
             for(Person *person in arrayResult){
-                [_pageData2 addObject:person];
+                [_personPageData addObject:person];
                 [_pageData addObject:person.timestamp];
             }
         }
+        //If hasn't Core Data, Create a new Page Data
         else{
-            /*
-            NSManagedObjectContext *managedObjectContext = [[DataManager sharedManager] managedObjectContext];
-            
-            NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Person" inManagedObjectContext:managedObjectContext];
-            
-            Person *person = [[Person alloc]initWithEntity: entityDescription insertIntoManagedObjectContext:managedObjectContext];
-            
-            person.name = @"";
-            person.timestamp = [self getDateString];
-            person.interaction = @"";
-            person.cardImage = nil;
-            [_pageData addObject:person];
-             */
             NSString *date = [self getDateString];
-            [_pageData addObject:date];
+            [_timestampPageData addObject:date];
         }
     }
     return self;
@@ -69,7 +59,7 @@
 //Forward flip page
 - (DataViewController *)forwardviewControllerAtIndex:(NSUInteger)index storyboard:(UIStoryboard *)storyboard {
     // Return the data view controller for the given index.
-    if (([self.pageData count] == 0) || (index >= [self.pageData count])) {
+    if (([self.timestampPageData count] == 0) || (index >= [self.timestampPageData count])) {
         return nil;
     }
     
@@ -78,8 +68,8 @@
     dataViewController.dataObject = self.pageData[index];
     
     //Set person detail view base on page index
-    if (([self.pageData2 count] != 0) && (index < [self.pageData2 count])) {
-        dataViewController.personObject = self.pageData2[index];
+    if (([self.personPageData count] != 0) && (index < [self.personPageData count])) {
+        dataViewController.personObject = self.personPageData[index];
     }
     
     //Set Page Number to dataViewController
@@ -92,7 +82,7 @@
 //Backward filp page
 - (DataViewController *)backwardviewControllerAtIndex:(NSUInteger)index storyboard:(UIStoryboard *)storyboard {
     // Return the data view controller for the given index.
-    if (([self.pageData count] == 0) || (index >= [self.pageData count])) {
+    if (([self.timestampPageData count] == 0) || (index >= [self.timestampPageData count])) {
         return nil;
     }
     
@@ -101,7 +91,7 @@
     
     //Set person detail view base on page index
     dataViewController.dataObject = self.pageData[index];
-    dataViewController.personObject = self.pageData2[index];
+    dataViewController.personObject = self.personPageData[index];
     
     //Set Page Number to dataViewController
     dataViewController.totalCount = self.pageData.count;
@@ -140,52 +130,35 @@
     
     index++;
     
-    if (index == [self.pageData count]) {
-        /*
-        NSManagedObjectContext *managedObjectContext = [[DataManager sharedManager] managedObjectContext];
-        
-        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Person" inManagedObjectContext:managedObjectContext];
-        
-        Person *person = [[Person alloc]initWithEntity: entityDescription insertIntoManagedObjectContext:managedObjectContext];
-        
-        person.name = [NSString stringWithFormat:@"Rui %lu",(unsigned long)index];
-        //dataViewControllerInstance.nameTextField.text=@"";
-        
-        NSString *timestamp =[self getDateString];
-        //dataViewControllerInstance.timestampTextField.text=timestamp;
-        person.timestamp = timestamp;
-        
-        person.interaction = [NSString stringWithFormat:@"interaction %lu",(unsigned long)index];
-        //dataViewControllerInstance.interactionTextView.text=@"";
-        
-        person.cardImage = nil;
-        //dataViewControllerInstance.cardImageView.image= nil;
-        
-        [_pageData addObject:person];
-         
-        */
+    if (index == [self.timestampPageData count]) {
         
         DataViewController *dataViewControllerInstance = (DataViewController *)viewController;
         
+        //If Name is empty, return nil
         if([dataViewControllerInstance.nameTextField.text isEqual: @""]){
             return nil;
         }
         
-        if( index != [self.pageData2 count]){
+        //Only Save Data When it is last page
+        if( index != [self.personPageData count]){
             NSData *uiImageData = UIImagePNGRepresentation(dataViewControllerInstance.cardImageView.image);
             
             [self SaveCoreData:dataViewControllerInstance.nameTextField.text Date:dataViewControllerInstance.timestampTextField.text Interaction:dataViewControllerInstance.interactionTextView.text CardImage:uiImageData];
             
-            dataViewControllerInstance.personObject = self.pageData2[index-1];
+            //set dataviewcontroller personObject
+            dataViewControllerInstance.personObject = self.personPageData[index-1];
         }
         
+        //Add a new page
         NSString *date = self.getDateString;
-        [_pageData addObject:date];
-        //return nil;
+        [_timestampPageData addObject:date];
+        
     }
+    
     return [self forwardviewControllerAtIndex:index storyboard:viewController.storyboard];
 }
 
+//Convert Data to String With Format
 -(NSString *)getDateString{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMM dd, yyyy HH:mm:ss"];
@@ -214,6 +187,7 @@
     
     NSError *error = nil;
     
+    // Fetch Core Data
     NSArray *results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
     if(error){
         NSLog(@"Fetch request Failed! %@", [error localizedDescription]);
@@ -225,20 +199,27 @@
 // Save data from the DataView
 - (void)SaveCoreData: (NSString*)name Date:(NSString*)date Interaction:(NSString*)interaction CardImage:(NSData*) cardImage{
     
+    // 1. Get a pointer to the database
     NSManagedObjectContext *managedObjectContext = [[DataManager sharedManager] managedObjectContext];
     
+    // 2. Get Entity Descripton
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Person" inManagedObjectContext:managedObjectContext];
     
+    // 3. Initial a new person
     Person *person = [[Person alloc]initWithEntity: entityDescription insertIntoManagedObjectContext:managedObjectContext];
     
+    // Set Data
     [person setValue:name forKeyPath:@"name"];
     [person setValue:date forKeyPath:@"timestamp"];
     [person setValue:interaction forKeyPath:@"interaction"];
     [person setValue:cardImage forKeyPath:@"cardImage"];
     
-    [_pageData2 addObject:person];
+    // Add to Page Data
+    [_personPageData addObject:person];
     
     NSError *error = nil;
+    
+    // Save Data to Core Data
     if(![managedObjectContext save:&error]){
         NSLog(@"Save Failed! %@", [error localizedDescription]);
     }else{
