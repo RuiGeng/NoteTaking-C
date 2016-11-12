@@ -25,5 +25,11 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *cardImageView;
 
+@property (weak, nonatomic) IBOutlet UILabel *pageNumberLabel;
+
+@property NSInteger currentCount;
+
+@property NSInteger totalCount;
+
 @end
 

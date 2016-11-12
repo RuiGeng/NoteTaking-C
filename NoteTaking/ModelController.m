@@ -78,6 +78,10 @@
     if (([self.pageData2 count] != 0) && (index < [self.pageData2 count])) {
         dataViewController.personObject = self.pageData2[index];
     }
+    
+    dataViewController.totalCount = self.pageData.count;
+    dataViewController.currentCount = index + 1;
+    
     return dataViewController;
 }
 
@@ -92,6 +96,10 @@
     DataViewController *dataViewController = [storyboard instantiateViewControllerWithIdentifier:@"DataViewController"];
     dataViewController.dataObject = self.pageData[index];
     dataViewController.personObject = self.pageData2[index];
+    
+    dataViewController.totalCount = self.pageData.count;
+    dataViewController.currentCount = index + 1;
+    
     return dataViewController;
 }
 

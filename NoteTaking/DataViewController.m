@@ -34,6 +34,8 @@
     
     self.timestampTextField.text = [self.dataObject description];
     
+    [self showCount:self.currentCount TotalCount:self.totalCount];
+    
     if ([self.personObject isKindOfClass:[Person class]]) {
         Person *classSpecifiedInstance = (Person *)self.personObject;
         if(classSpecifiedInstance != nil){
@@ -55,6 +57,7 @@
             }
         }
     }
+    
 }
 
 -(void) setUITextViewStyle{
@@ -72,4 +75,14 @@
     self.cardImageView.layer.borderWidth = 1.0;
     self.cardImageView.layer.cornerRadius = 5.0;
 }
+
+-(void)showCount:(NSInteger)current TotalCount:(NSInteger)total{
+    
+    NSString *labCount;
+    
+    labCount = [NSString stringWithFormat:@"%li/%li", (long)current, (long)total];
+    
+    self.pageNumberLabel.text = labCount;
+}
+
 @end
